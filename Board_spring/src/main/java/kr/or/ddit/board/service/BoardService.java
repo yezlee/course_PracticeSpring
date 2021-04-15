@@ -57,6 +57,4 @@ public class BoardService implements BoardServiceI{
 		return boardDao.insertPost(postVo);
 	}
 
-
-
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- mybatis-config.xml 파일은 그냥 xml파일이고 위에 doctype은 마이바티스 웹사이트에서 가져온것임 -->  
+  
+<configuration>
+	 
+	<typeAliases>
+		<typeAlias type="kr.or.ddit.user.model.UserVo"  alias ="userVo"/>
+		<typeAlias type="kr.or.ddit.common.model.PageVo"  alias ="pageVo"/>
+	</typeAliases>  
+	
+	<mappers>
+	  <mapper resource="kr/or/ddit/config/mybatis/mapper/users.xml"/>
+	</mappers>
+
+  
+</configuration>

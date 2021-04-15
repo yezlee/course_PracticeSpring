@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- kr.or.ddit 하위의 모든 클래스중 @Controller 어노테이션이 적용된 클래스만 스캔 -->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<mvc:annotation-driven/>
+	
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0"/>
+	</bean>
+	
+	<!--  얘는 우선순위가 무조건 꼴찌 
+		prefix, surfix 조합에 의해 생성된 문자열에 해당하는 리소스(jsp)가 없어도 검증을 하지않고 응답으로 내보낸다.
+	즉 파일이 존재하지 않을 경우 404에러 발생. 따라서 우선순위를 가장 최하위로 둔다. 제일 마지막에 실행해!!
+	-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1"/>
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 스프링이 처리하지 못하는 요청에 대해 서버에 설정이 되어있는 default서블릿으로 요청을 위임 
+		그래서 jsp파일을 요청해도 코드 자체가 그대로 화면에 뜨고.. 정적자원 처리한거처럼. 
+	-->	
+	<mvc:default-servlet-handler/>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
+</beans>

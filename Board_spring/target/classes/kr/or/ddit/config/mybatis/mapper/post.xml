@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="post">
+	<select id="selectPostList" resultType="postVo" parameterType="pageVo" >
+		SELECT LPAD((' '), 8*(LEVEL-1)) || TITLE title, bd_no, post_no, writer, reg_dt, post_del, LEVEL boardLevel
+		FROM
+		    (SELECT ROWNUM rn, a.*
+		     FROM
+		         (SELECT *
+		          FROM Y_POST
+		          WHERE bd_no = #{boardNo}
+		          ORDER BY post_no DESC
+		          ) a
+		     )
+		WHERE rn BETWEEN (#{page}-1) * #{pageSize} +1 AND #{page} * #{pageSize}
+		START WITH pr_post_no IS NULL 
+	    CONNECT BY PRIOR POST_NO = pr_post_no
+	    ORDER SIBLINGS BY reg_dt DESC
+	</select>
+	
+	<select id="selectPostListCnt" resultType="int" parameterType="pageVo">
+		SELECT count(*)
+		FROM Y_POST
+		WHERE bd_no = #{boardNo}
+	</select>
+	
+	<select id="selectPostDetailPage" resultType="postVo" parameterType="postVo">
+		SELECT *
+		FROM y_post
+		WHERE bd_no = #{bd_no} AND post_no = #{post_no} AND writer = #{writer}
+	</select>
+	
+	<insert id="insertPost" parameterType="postVo">
+		INSERT INTO y_post VALUES(#{bd_no}, y_post_seq_test.nextval, #{writer}, #{title}, #{cont}, SYSDATE, 1, '', '', '')	
+	</insert> 
+	
+	
+	
+	
+</mapper>  
